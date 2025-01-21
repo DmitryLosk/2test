@@ -35,7 +35,7 @@ pipeline {
 			steps {
 				script {
 					sh """
-helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart-directory \
+helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
 --set image.tag=${params.TAG_NAME}
