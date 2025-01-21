@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-app
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 3003
+          env:
+            - name: DB_HOST
+              value: {{ .Values.env.DB_HOST }}
+            - name: DB_NAME
+              value: {{ .Values.env.DB_NAME }}
+            - name: DB_USER
+              value: {{ .Values.env.DB_USER }}
+            - name: DB_PASS
+              value: {{ .Values.env.DB_PASS }}
+          volumeMounts:
+            - name: app-storage
+              mountPath: /app
+
+      volumes:
+        - name: app-storage
+          persistentVolumeClaim:
+            claimName: tutorial-app-pvc
