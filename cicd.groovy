@@ -22,7 +22,7 @@ pipeline {
 		stage('Build Docker Image') {
 			steps {
 				script {
-					echo http
+					echo "http"
 					docker.build("${DOCKER_IMAGE}:${params.TAG_NAME}")
 					docker.withRegistry("${NEXUS_REPO}", "${DOCKER_CREDENTIALS_ID}") {
 						docker.image("${DOCKER_IMAGE}:${params.TAG_NAME}").push()
