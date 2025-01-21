@@ -3,7 +3,7 @@ pipeline {
 
 	environment {
 		DOCKER_CREDENTIALS_ID = 'docker-cred'
-		DOCKER_IMAGE = "158.160.46.211:5005/tutorial-app"
+		DOCKER_IMAGE = "dmitrylosk/tutorial-app"
 		NEXUS_REPO = 'http://158.160.46.211:5005'
 		HELM_CHART_PATH = './helm-chart'
 		HELM_RELEASE_NAME = 'app'
@@ -24,7 +24,7 @@ pipeline {
 				script {
 					echo "http"
 					docker.build("${DOCKER_IMAGE}:${params.TAG_NAME}")
-					docker.withRegistry("${NEXUS_REPO}", "${DOCKER_CREDENTIALS_ID}") {
+					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
 						docker.image("${DOCKER_IMAGE}:${params.TAG_NAME}").push()
 					}
 				}
