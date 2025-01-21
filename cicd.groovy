@@ -3,11 +3,16 @@ pipeline {
 
 	environment {
 		DOCKER_CREDENTIALS_ID = 'docker-cred'
-		DOCKER_IMAGE = "158.160.46.211:5005/tutorial-app:001"
+		DOCKER_IMAGE = "158.160.46.211:5005/tutorial-app"
+		NEXUS_REPO = '158.160.46.211:5005'
 		HELM_CHART_PATH = './helm-chart'
+		HELM_RELEASE_NAME = 'app'
+		HELM_NAMESPACE = 'dplm'
 		KUBE_CONFIG = '~/.kube/config' // Убедитесь, что путь правильный
 	}
-
+	parameters {
+		string(name: 'TAG_NAME', defaultValue: 'latest', description: 'Tag name for the Docker image')
+	}
 	stages {
 		stage('Clone Repository') {
 			steps {
@@ -18,9 +23,9 @@ pipeline {
 			steps {
 				script {
 					echo http
-					docker.withRegistry('http://158.160.46.211:5005', DOCKER_CREDENTIALS_ID) {
-						def customImage = docker.build(DOCKER_IMAGE)
-						customImage.push()
+					docker.build("${DOCKER_IMAGE}:${params.TAG_NAME}")
+					docker.withRegistry("${NEXUS_REPO}", "${DOCKER_CREDENTIALS_ID}") {
+						docker.image("${DOCKER_IMAGE}:${params.TAG_NAME}").push()
 					}
 				}
 			}
@@ -29,7 +34,12 @@ pipeline {
 		stage('Deploy with Helm') {
 			steps {
 				script {
-					sh "helm upgrade --install myapp ${HELM_CHART_PATH} --set image.tag=${GIT_COMMIT}"
+					sh """
+helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart-directory \
+--namespace ${HELM_NAMESPACE} \
+--set image.repository=${DOCKER_IMAGE} \
+--set image.tag=${params.TAG_NAME}
+"""
 				}
 			}
 		}
