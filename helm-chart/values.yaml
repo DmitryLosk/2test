@@ -1,19 +1,25 @@
 replicaCount: 1
 
 image:
-  repository: 158.160.46.211:5005/tutorial-app
-  tag: latest # Это будет обновляться в Jenkins pipeline
+  repository: dmitrylosk/tutorial-app
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
   port: 3003
 
+postgresql:
+  image: postgres:13-alpine
+  username: vinhle
+  password: password
+  database: tutorial-dev
+  servicePort: 5432
+
 persistence:
   enabled: true
-  storageClass: "standard" # Убедитесь, что у вас есть этот StorageClass в вашем кластере
-  accessModes:
-    - ReadWriteOnce
+  storageClass: "standard"
+  accessModes: ReadWriteOnce
   size: 1Gi
 
 env:
@@ -21,9 +27,3 @@ env:
   DB_NAME: tutorial-dev
   DB_USER: vinhle
   DB_PASS: password
-
-postgres:
-  image: postgres:13-alpine
-  user: vinhle
-  password: password
-  database: tutorial-dev
