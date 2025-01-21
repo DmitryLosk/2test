@@ -17,6 +17,7 @@ pipeline {
 		stage('Build Docker Image') {
 			steps {
 				script {
+					echo http
 					docker.withRegistry('http://158.160.46.211:5005', DOCKER_CREDENTIALS_ID) {
 						def customImage = docker.build(DOCKER_IMAGE)
 						customImage.push()
