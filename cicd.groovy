@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		DOCKER_CREDENTIALS_ID = 'docker-cred'
 		DOCKER_IMAGE = "158.160.46.211:5005/tutorial-app"
-		NEXUS_REPO = '158.160.46.211:5005'
+		NEXUS_REPO = 'http://158.160.46.211:5005'
 		HELM_CHART_PATH = './helm-chart'
 		HELM_RELEASE_NAME = 'app'
 		HELM_NAMESPACE = 'dplm'
