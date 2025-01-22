@@ -10,9 +10,9 @@ pipeline {
 		HELM_NAMESPACE = 'dplm'
 		KUBE_CONFIG = '~/.kube/config' // Убедитесь, что путь правильный
 	}
-	parameters {
+	/*parameters {
 		string(name: 'TAG_NAME', defaultValue: 'latest', description: 'Tag name for the Docker image')
-	}
+	}*/
 	stages {
 		stage('Clone Repository') {
 			steps {
@@ -32,10 +32,12 @@ sudo apt-get install -y helm
 			steps {
 				script {
 					echo "http"
-					docker.build("${DOCKER_IMAGE}:${params.TAG_NAME}")
+					def tag = env.GIT_TAG ?: 'latest'
+					docker.build("${DOCKER_IMAGE}:${tag}")
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
-						docker.image("${DOCKER_IMAGE}:${params.TAG_NAME}").push()
+						docker.image("${DOCKER_IMAGE}:${tag}").push()
 					}
+					echo "Docker image successfully built and pushed with tag: ${tag}"
 				}
 			}
 		}
@@ -43,17 +45,25 @@ sudo apt-get install -y helm
 		stage('Deploy with Helm') {
 			steps {
 				script {
+					def tag = env.GIT_TAG ?: 'latest'
 					sh """
 helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
---set image.tag=${params.TAG_NAME}
+--set image.tag=${tag}
 """
 				}
 			}
 		}
 	}
-
+	post {
+		success {
+			echo "Docker image successfully built and pushed with tag: ${tag}"
+		}
+		failure {
+			echo "Build failed."
+		}
+	}
 	triggers {
 		githubPush()
 	}
