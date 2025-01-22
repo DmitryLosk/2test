@@ -10,6 +10,9 @@ pipeline {
 		HELM_NAMESPACE = 'dplm'
 		KUBE_CONFIG = '~/.kube/config' // Убедитесь, что путь правильный
 	}
+	triggers {
+		githubPush()
+	}
 	/*parameters {
 		string(name: 'TAG_NAME', defaultValue: 'latest', description: 'Tag name for the Docker image')
 	}*/
