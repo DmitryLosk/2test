@@ -22,7 +22,7 @@ pipeline {
 				git branch: 'main', url: 'https://github.com/DmitryLosk/2test.git'
 			}
 		}
-		stage('Install Helm') {
+		/*stage('Install Helm') {
 			steps {
 				sh '''
 sudo apt-get install apt-transport-https --yes
@@ -30,7 +30,7 @@ sudo apt-get update
 sudo apt-get install -y helm
 '''
 			}
-		}
+		}*/
 		stage('Build Docker Image') {
 			steps {
 				script {
