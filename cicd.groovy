@@ -67,7 +67,4 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 			echo "Build failed."
 		}
 	}
-	triggers {
-		githubPush()
-	}
 }
