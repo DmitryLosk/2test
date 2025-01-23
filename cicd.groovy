@@ -53,7 +53,7 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 	}
 	post {
 		success {
-			echo "Docker image successfully built and pushed with tag "
+			echo "Successfully built and pushed with tag "
 		}
 		failure {
 			echo "Build failed."
