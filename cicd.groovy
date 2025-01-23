@@ -25,7 +25,7 @@ pipeline {
 			steps {
 				script {
 					echo TAG_NAME
-					def tag = env.GIT_TAG ?: 'latest'
+					def TAG_NAME = env.GIT_TAG ?: 'latest'
 
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
 						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
@@ -39,7 +39,7 @@ pipeline {
 		stage('Deploy with Helm') {
 			steps {
 				script {
-					def tag = env.GIT_TAG ?: 'latest'
+					def TAG_NAME = env.GIT_TAG ?: 'latest'
 					sh """
 helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 --namespace ${HELM_NAMESPACE} \
