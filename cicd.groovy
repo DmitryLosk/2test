@@ -16,11 +16,16 @@ pipeline {
 		string(name: 'TAG_NAME', defaultValue: 'latest', description: 'Tag name for the Docker image')
 	}*/
 	stages {
-		stage('Clone Repository') {
+		stage('Checkout') {
+			steps {
+				checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/DmitryLosk/2test.git']], branches: [[name: 'refs/tags/${TAG}']]], poll: false
+			}
+		}
+		/*stage('Clone Repository') {
 			steps {
 				git branch: 'main', url: 'https://github.com/DmitryLosk/2test.git'
 			}
-		}
+		}*/
 		stage('Build Docker Image') {
 			steps {
 				script {
