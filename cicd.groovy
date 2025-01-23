@@ -8,7 +8,7 @@ pipeline {
 		HELM_CHART_PATH = './helm-chart'
 		HELM_RELEASE_NAME = 'app'
 		HELM_NAMESPACE = 'dplm'
-		KUBE_CONFIG = '~/.kube/config' // Убедитесь, что путь правильный
+		KUBECONFIG = credentials('kubeconfig')
 	}
 	triggers {
 		githubPush()
@@ -41,11 +41,13 @@ pipeline {
 			steps {
 				script {
 					def tag = env.GIT_TAG ?: 'latest'
+					withEnv([KUBECONFIG]
 					sh """
-sudo helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
+helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
---set image.tag=${tag}
+--set image.tag=${tag} \
+--kubeconfig $KUBECONFIG
 """
 				}
 			}
