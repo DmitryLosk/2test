@@ -19,7 +19,6 @@ pipeline {
 		stage('Checkout') {
 			steps {
 				script {
-					git tag-- sort = -creatordate | head - n 1
 					latestTag = sh(returnStdout: true, script: "git tag --sort=-creatordate | head -n 1").trim()
 					echo latestTag
 					checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/DmitryLosk/2test.git']], branches: [[name: "refs/tags/${env.GIT_TAG}"]]], poll: false
