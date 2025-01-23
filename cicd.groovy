@@ -31,7 +31,7 @@ pipeline {
 						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
 						docker.image("${DOCKER_IMAGE}:${TAG_NAME}").push()
 					}
-					echo "Docker image successfully built and pushed with tag: ${tag}"
+					echo "Docker image successfully built and pushed with tag: ${TAG_NAME}"
 				}
 			}
 		}
