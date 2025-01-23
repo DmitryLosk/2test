@@ -41,7 +41,6 @@ pipeline {
 			steps {
 				script {
 					def tag = env.GIT_TAG ?: 'latest'
-					withEnv([KUBECONFIG]
 					sh """
 helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 --namespace ${HELM_NAMESPACE} \
