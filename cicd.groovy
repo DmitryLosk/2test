@@ -39,6 +39,7 @@ pipeline {
 		stage('Deploy with Helm') {
 			steps {
 				script {
+					echo "Helm"
 					def TAG_NAME = env.GIT_TAG ?: 'latest'
 					sh """
 helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
