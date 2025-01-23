@@ -59,8 +59,7 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 	}
 	post {
 		success {
-			def TAG_NAME = env.GIT_TAG ?: 'latest'
-			echo "Docker image successfully built and pushed with tag: ${TAG_NAME}"
+			echo "Docker image successfully built and pushed with tag "
 		}
 		failure {
 			echo "Build failed."
