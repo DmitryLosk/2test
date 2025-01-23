@@ -22,22 +22,14 @@ pipeline {
 				git branch: 'main', url: 'https://github.com/DmitryLosk/2test.git'
 			}
 		}
-		/*stage('Install Helm') {
-			steps {
-				sh '''
-sudo apt-get install apt-transport-https --yes
-sudo apt-get update
-sudo apt-get install -y helm
-'''
-			}
-		}*/
 		stage('Build Docker Image') {
 			steps {
 				script {
 					echo "http"
 					def tag = env.GIT_TAG ?: 'latest'
-					docker.build("${DOCKER_IMAGE}:${tag}")
+
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
+						docker.build("${DOCKER_IMAGE}:${tag}")
 						docker.image("${DOCKER_IMAGE}:${tag}").push()
 					}
 					echo "Docker image successfully built and pushed with tag: ${tag}"
