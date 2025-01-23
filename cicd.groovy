@@ -48,6 +48,7 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 --set image.tag=${TAG_NAME} \
 --kubeconfig $KUBECONFIG
 """
+				cleanWs()
 				}
 			}
 		}

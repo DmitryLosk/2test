@@ -21,8 +21,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+    - port: {{ .Values.postgresql.servicePort }}
+      targetPort: {{ .Values.postgresql.servicePort }}
       protocol: TCP
   selector:
     app: postgres
