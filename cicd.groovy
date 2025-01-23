@@ -16,7 +16,7 @@ pipeline {
 		stage('Checkout') {
 			steps {
 				script {
-					cleanWS()
+					cleanWs()
 					latestTag = sh(returnStdout: true, script: "git tag --sort=-creatordate | head -n 1").trim()
 					echo latestTag
 					TAG_NAME = latestTag
