@@ -24,9 +24,9 @@ pipeline {
 		stage('Build Docker Image') {
 			steps {
 				script {
-					echo TAG_NAME
-					def TAG_NAME = env.GIT_TAG ?: 'latest'
 
+					def TAG_NAME = env.GIT_TAG ?: 'latest'
+					echo TAG_NAME
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
 						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
 						docker.image("${DOCKER_IMAGE}:${TAG_NAME}").push()
