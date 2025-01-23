@@ -12,9 +12,6 @@ pipeline {
 	triggers {
 		githubPush()
 	}
-	/*parameters {
-		string(name: 'TAG_NAME', defaultValue: 'latest', description: 'Tag name for the Docker image')
-	}*/
 	stages {
 		stage('Checkout') {
 			steps {
@@ -27,16 +24,9 @@ pipeline {
 				}
 			}
 		}
-		/*stage('Clone Repository') {
-			steps {
-				git branch: 'main', url: 'https://github.com/DmitryLosk/2test.git'
-			}
-		}*/
 		stage('Build Docker Image') {
 			steps {
 				script {
-
-					//def TAG_NAME = env.GIT_TAG ?: 'latest'
 					echo TAG_NAME
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
 						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
@@ -46,12 +36,10 @@ pipeline {
 				}
 			}
 		}
-
 		stage('Deploy with Helm') {
 			steps {
 				script {
 					echo "Helm"
-					//def TAG_NAME = env.GIT_TAG ?: 'latest'
 					sh """
 helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 --namespace ${HELM_NAMESPACE} \
