@@ -24,7 +24,7 @@ pipeline {
 		stage('Build Docker Image') {
 			steps {
 				script {
-					echo "http"
+					echo TAG_NAME
 					def tag = env.GIT_TAG ?: 'latest'
 
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
