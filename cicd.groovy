@@ -31,6 +31,7 @@ pipeline {
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
 						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
 						docker.image("${DOCKER_IMAGE}:${TAG_NAME}").push()
+						sh 'docker system prune -af'
 					}
 					echo "Docker image successfully built and pushed with tag: ${TAG_NAME}"
 				}
