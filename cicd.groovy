@@ -57,7 +57,7 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 			echo "Successfully built and pushed "
 		}
 		failure {
-			echo "Build failed."
+			echo "Build failed"
 		}
 	}
 }
