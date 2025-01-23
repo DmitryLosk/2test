@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 3003
           command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"]
@@ -23,11 +23,11 @@ spec:
             - name: DB_HOST
               value: db
             - name: DB_NAME
-              value: { { .Values.postgresql.database } }
+              value: {{ .Values.postgresql.database }}
             - name: DB_USER
-              value: { { .Values.postgresql.username } }
+              value: {{ .Values.postgresql.username }}
             - name: DB_PASS
-              value: { { .Values.postgresql.password } }
+              value: {{ .Values.postgresql.password }}
             - name: POD_IP
               valueFrom:
                 fieldRef:
