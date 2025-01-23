@@ -18,7 +18,7 @@ pipeline {
 	stages {
 		stage('Checkout') {
 			steps {
-				checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/DmitryLosk/2test.git']], branches: [[name: 'refs/tags/${TAG}']]], poll: false
+				checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/DmitryLosk/2test.git']], branches: [[name: 'refs/tags/${env.GIT_TAG}']]], poll: false
 			}
 		}
 		/*stage('Clone Repository') {
