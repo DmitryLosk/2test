@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "myapp.fullname" . }}
-  labels:
-    app: {{ include "myapp.name" . }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: {{ include "myapp.name" . }}
@@ -16,19 +14,19 @@ spec:
     spec:
       containers:
         - name: app
-          imagePullPolicy: Always
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: 3003
+          command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"]
           env:
             - name: DB_HOST
               value: localhost
             - name: DB_NAME
-              value: {{ .Values.postgresql.database }}
+              value: { { .Values.postgresql.database } }
             - name: DB_USER
-              value: {{ .Values.postgresql.username }}
+              value: { { .Values.postgresql.username } }
             - name: DB_PASS
-              value: {{ .Values.postgresql.password }}
+              value: { { .Values.postgresql.password } }
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -38,23 +36,35 @@ spec:
                 fieldRef:
                   fieldPath: status.hostIP
 
-          command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"]
+---
 
-        - name: db
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgresql
           image: {{ .Values.postgresql.image }}
           env:
             - name: POSTGRES_DB
-              value: {{ .Values.postgresql.database }}
+              value: "{{ .Values.postgresql.database }}"
             - name: POSTGRES_USER
-              value: {{ .Values.postgresql.username }}
+              value: "{{ .Values.postgresql.username}}"
             - name: POSTGRES_PASSWORD
-              value: {{ .Values.postgresql.password }}
-          ports:
-            - containerPort: {{ .Values.postgresql.servicePort }}
+              value: "{{ .Values.postgresql.password}}"
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:

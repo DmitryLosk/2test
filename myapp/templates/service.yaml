@@ -5,9 +5,24 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 80
       targetPort: {{ .Values.service.port }}
       nodePort: {{ .Values.service.Nport }}
       protocol: TCP
   selector:
     app: {{ include "myapp.name" . }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+  selector:
+    app: postgres
