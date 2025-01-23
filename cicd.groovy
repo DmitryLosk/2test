@@ -2,6 +2,7 @@ pipeline {
 	agent any
 
 	environment {
+		TAG_NAME = "${env.GIT_TAG_NAME}"
 		DOCKER_CREDENTIALS_ID = 'docker-cred'
 		DOCKER_IMAGE = "dmitrylosk/tutorial-app"
 		NEXUS_REPO = 'http://158.160.46.211:5005'
@@ -29,8 +30,8 @@ pipeline {
 					def tag = env.GIT_TAG ?: 'latest'
 
 					docker.withRegistry("", "${DOCKER_CREDENTIALS_ID}") {
-						docker.build("${DOCKER_IMAGE}:${tag}")
-						docker.image("${DOCKER_IMAGE}:${tag}").push()
+						docker.build("${DOCKER_IMAGE}:${TAG_NAME}")
+						docker.image("${DOCKER_IMAGE}:${TAG_NAME}").push()
 					}
 					echo "Docker image successfully built and pushed with tag: ${tag}"
 				}
@@ -45,7 +46,7 @@ pipeline {
 helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
---set image.tag=${tag} \
+--set image.tag=${TAG_NAME} \
 --kubeconfig $KUBECONFIG
 """
 				}
@@ -54,7 +55,7 @@ helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 	}
 	post {
 		success {
-			echo "Docker image successfully built and pushed with tag: ${tag}"
+			echo "Docker image successfully built and pushed with tag: ${TAG_NAME}"
 		}
 		failure {
 			echo "Build failed."
