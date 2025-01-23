@@ -5,8 +5,6 @@ pipeline {
 		TAG_NAME = "${env.GIT_TAG_NAME}"
 		DOCKER_CREDENTIALS_ID = 'docker-cred'
 		DOCKER_IMAGE = "dmitrylosk/tutorial-app"
-		NEXUS_REPO = 'http://158.160.46.211:5005'
-		HELM_CHART_PATH = './helm-chart'
 		HELM_RELEASE_NAME = 'myapp'
 		HELM_NAMESPACE = 'dplm'
 		KUBECONFIG = credentials('kubeconfig')
