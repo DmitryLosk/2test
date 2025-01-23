@@ -6,7 +6,7 @@ pipeline {
 		DOCKER_IMAGE = "dmitrylosk/tutorial-app"
 		NEXUS_REPO = 'http://158.160.46.211:5005'
 		HELM_CHART_PATH = './helm-chart'
-		HELM_RELEASE_NAME = 'app'
+		HELM_RELEASE_NAME = 'myapp'
 		HELM_NAMESPACE = 'dplm'
 		KUBECONFIG = credentials('kubeconfig')
 	}
@@ -42,7 +42,7 @@ pipeline {
 				script {
 					def tag = env.GIT_TAG ?: 'latest'
 					sh """
-helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
+helm upgrade --install ${HELM_RELEASE_NAME} ./myapp \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
 --set image.tag=${tag} \
