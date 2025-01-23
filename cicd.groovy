@@ -42,7 +42,7 @@ pipeline {
 				script {
 					def tag = env.GIT_TAG ?: 'latest'
 					sh """
-helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
+sudo helm upgrade --install ${HELM_RELEASE_NAME} ./helm-chart \
 --namespace ${HELM_NAMESPACE} \
 --set image.repository=${DOCKER_IMAGE} \
 --set image.tag=${tag}
